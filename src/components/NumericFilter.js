@@ -93,7 +93,7 @@ function NumericFilter() {
           return null;
         }
         return (
-          <div key={ filter.column }>
+          <div data-testid="filter" key={ filter.column }>
             <span>{filter.column}</span>
             <span>{filter.comparison}</span>
             <span>{filter.value}</span>
@@ -105,6 +105,19 @@ function NumericFilter() {
           </div>
         );
       })}
+      <button
+        data-testid="button-remove-filters"
+        type="button"
+        onClick={ () => setNumericValuesFilter([
+          {
+            column: '',
+            comparison: '',
+            value: 0,
+          },
+        ]) }
+      >
+        REMOVE ALL
+      </button>
     </div>
   );
 }
