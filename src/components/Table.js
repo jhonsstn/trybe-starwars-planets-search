@@ -51,8 +51,6 @@ function Table() {
       (prev, actual) => prev.filter((planet) => checkValues(planet, actual)),
       nameFilteredPlanets,
     );
-
-    // const numericFiltered = nameFilteredPlanets.filter(checkValues);
     return renderTableLines(numericFiltered);
   };
 
