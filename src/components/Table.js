@@ -2,12 +2,11 @@ import React, { useContext, useEffect } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
 
 function Table() {
-  const { data, fetchData, nameFilter, numericValuesFilter } = useContext(PlanetsContext);
-  const { column, comparison, value } = numericValuesFilter;
+  const { data, nameFilter, numericValuesFilter } = useContext(PlanetsContext); // fetchData;
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [fetchData]);
 
   const renderTableLines = (planets) => planets.map((planet) => (
     <tr key={ planet.name }>
@@ -32,21 +31,28 @@ function Table() {
     return include;
   };
 
-  const checkValues = (planet) => {
-    if (comparison === 'menor que') {
-      return parseFloat(planet[column]) < parseFloat(value);
+  const checkValues = (planet, obj) => {
+    if (obj.comparison === 'menor que') {
+      return parseFloat(planet[obj.column]) < parseFloat(obj.value);
     }
-    if (comparison === 'maior que') {
-      return parseFloat(planet[column]) > parseFloat(value);
-    } if (comparison === 'igual a') {
-      return parseFloat(planet[column]) === parseFloat(value);
+    if (obj.comparison === 'maior que') {
+      return parseFloat(planet[obj.column]) > parseFloat(obj.value);
+    }
+    if (obj.comparison === 'igual a') {
+      return parseFloat(planet[obj.column]) === parseFloat(obj.value);
     }
     return true;
   };
 
   const filterPlanets = (planets) => {
     const nameFilteredPlanets = planets.filter(nameIncludesInputValue);
-    const numericFiltered = nameFilteredPlanets.filter(checkValues);
+
+    const numericFiltered = numericValuesFilter.reduce(
+      (prev, actual) => prev.filter((planet) => checkValues(planet, actual)),
+      nameFilteredPlanets,
+    );
+
+    // const numericFiltered = nameFilteredPlanets.filter(checkValues);
     return renderTableLines(numericFiltered);
   };
 

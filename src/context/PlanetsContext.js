@@ -1,28 +1,31 @@
 import PropTypes from 'prop-types';
 import React, { createContext, useState } from 'react';
+import data from '../data';
 
 export const PlanetsContext = createContext();
 
 export function PlanetsContextProvider({ children }) {
-  const [data, setData] = useState({ results: [] });
+  // const [data, setData] = useState({ results: [] });
   const [nameFilter, setNameFilter] = useState({ name: '' });
-  const [numericValuesFilter, setNumericValuesFilter] = useState({
-    column: '',
-    comparison: '',
-    value: '',
-  });
+  const [numericValuesFilter, setNumericValuesFilter] = useState([
+    {
+      column: '',
+      comparison: '',
+      value: 0,
+    },
+  ]);
 
-  const fetchData = async () => {
-    const planetsResp = await fetch(
-      'https://swapi-trybe.herokuapp.com/api/planets/?format=json',
-    );
-    const planetsData = await planetsResp.json();
-    setData(planetsData);
-  };
+  // const fetchData = async () => {
+  //   const planetsResp = await fetch(
+  //     'https://swapi-trybe.herokuapp.com/api/planets/?format=json',
+  //   );
+  //   const planetsData = await planetsResp.json();
+  //   setData(planetsData);
+  // };
 
   const contextValues = {
     data,
-    fetchData,
+    // fetchData,
     nameFilter,
     setNameFilter,
     numericValuesFilter,

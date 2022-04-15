@@ -13,11 +13,14 @@ function NumericFilter() {
     //   comparison,
     //   value,
     // };
-    setNumericValuesFilter({
-      column,
-      comparison,
-      value,
-    });
+    setNumericValuesFilter((prevState) => [
+      ...prevState,
+      {
+        column,
+        comparison,
+        value,
+      },
+    ]);
   };
 
   return (
