@@ -2,7 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
 
 function Table() {
-  const { data, fetchData, nameFilter } = useContext(PlanetsContext);
+  const { data, fetchData, nameFilter, numericValuesFilter } = useContext(PlanetsContext);
+  const { column, comparison, value } = numericValuesFilter;
 
   useEffect(() => {
     fetchData();
@@ -26,10 +27,27 @@ function Table() {
     </tr>
   ));
 
-  const filterPlanets = (planets) => {
-    const filteredPlanets = planets.filter((planet) => planet.name.includes(nameFilter));
+  const nameIncludesInputValue = (planet) => {
+    const include = planet.name.toLowerCase().includes(nameFilter.name);
+    return include;
+  };
 
-    return renderTableLines(filteredPlanets);
+  const checkValues = (planet) => {
+    if (comparison === 'menor que') {
+      return parseFloat(planet[column]) < parseFloat(value);
+    }
+    if (comparison === 'maior que') {
+      return parseFloat(planet[column]) > parseFloat(value);
+    } if (comparison === 'igual a') {
+      return parseFloat(planet[column]) === parseFloat(value);
+    }
+    return true;
+  };
+
+  const filterPlanets = (planets) => {
+    const nameFilteredPlanets = planets.filter(nameIncludesInputValue);
+    const numericFiltered = nameFilteredPlanets.filter(checkValues);
+    return renderTableLines(numericFiltered);
   };
 
   return (

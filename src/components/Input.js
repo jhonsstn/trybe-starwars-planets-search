@@ -8,8 +8,8 @@ function Input() {
     <input
       data-testid="name-filter"
       type="text"
-      value={ nameFilter }
-      onChange={ ({ target }) => setNameFilter(target.value) }
+      value={ nameFilter.name }
+      onChange={ ({ target }) => setNameFilter({ name: target.value }) }
     />
   );
 }
