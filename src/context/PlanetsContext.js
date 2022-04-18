@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { createContext, useState } from 'react';
+import useAPI from '../hooks/useAPI';
+
+const API_URL = 'https://swapi-trybe.herokuapp.com/api/planets/';
 
 export const PlanetsContext = createContext();
 
 export function PlanetsContextProvider({ children }) {
-  const [data, setData] = useState({ results: [] });
+  const [data] = useAPI(API_URL);
   const [nameFilter, setNameFilter] = useState({ name: '' });
   const [numericValuesFilter, setNumericValuesFilter] = useState([
     {
@@ -18,17 +21,8 @@ export function PlanetsContextProvider({ children }) {
     sort: '',
   });
 
-  const fetchData = async () => {
-    const planetsResp = await fetch(
-      'https://swapi-trybe.herokuapp.com/api/planets/',
-    );
-    const planetsData = await planetsResp.json();
-    setData(planetsData);
-  };
-
   const contextValues = {
     data,
-    fetchData,
     nameFilter,
     setNameFilter,
     numericValuesFilter,

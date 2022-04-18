@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
 
 const NEGATIVE = -1;
@@ -8,15 +8,10 @@ const ZERO = 0;
 function Table() {
   const {
     data,
-    fetchData,
     nameFilter,
     numericValuesFilter,
     order: { column, sort },
   } = useContext(PlanetsContext);
-
-  useEffect(() => {
-    fetchData();
-  });
 
   const renderTableLines = (planets) => planets.map((planet) => (
     <tr key={ planet.name }>
