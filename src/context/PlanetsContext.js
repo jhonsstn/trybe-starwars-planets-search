@@ -13,10 +13,14 @@ export function PlanetsContextProvider({ children }) {
       value: 0,
     },
   ]);
+  const [order, setOrder] = useState({
+    column: '',
+    sort: '',
+  });
 
   const fetchData = async () => {
     const planetsResp = await fetch(
-      'https://swapi-trybe.herokuapp.com/api/planets/?format=json',
+      'https://swapi-trybe.herokuapp.com/api/planets/',
     );
     const planetsData = await planetsResp.json();
     setData(planetsData);
@@ -29,6 +33,8 @@ export function PlanetsContextProvider({ children }) {
     setNameFilter,
     numericValuesFilter,
     setNumericValuesFilter,
+    order,
+    setOrder,
   };
   return (
     <PlanetsContext.Provider value={ contextValues }>

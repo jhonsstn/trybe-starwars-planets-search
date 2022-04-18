@@ -1,32 +1,38 @@
-import React, { useContext, useEffect } from "react";
-import { PlanetsContext } from "../context/PlanetsContext";
+import React, { useContext, useEffect } from 'react';
+import { PlanetsContext } from '../context/PlanetsContext';
+
+const NEGATIVE = -1;
+const POSITIVE = 1;
+const ZERO = 0;
 
 function Table() {
-  const { data, fetchData, nameFilter, numericValuesFilter } =
-    useContext(PlanetsContext);
+  const { data, fetchData, nameFilter } = useContext(PlanetsContext);
+  const {
+    numericValuesFilter,
+    order: { column, sort },
+  } = useContext(PlanetsContext);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  });
 
-  const renderTableLines = (planets) =>
-    planets.map((planet) => (
-      <tr key={planet.name}>
-        <td>{planet.name}</td>
-        <td>{planet.rotation_period}</td>
-        <td>{planet.orbital_period}</td>
-        <td>{planet.diameter}</td>
-        <td>{planet.climate}</td>
-        <td>{planet.gravity}</td>
-        <td>{planet.terrain}</td>
-        <td>{planet.surface_water}</td>
-        <td>{planet.population}</td>
-        <td>{planet.films}</td>
-        <td>{planet.created}</td>
-        <td>{planet.edited}</td>
-        <td>{planet.url}</td>
-      </tr>
-    ));
+  const renderTableLines = (planets) => planets.map((planet) => (
+    <tr key={ planet.name }>
+      <td data-testid="planet-name">{planet.name}</td>
+      <td>{planet.rotation_period}</td>
+      <td>{planet.orbital_period}</td>
+      <td>{planet.diameter}</td>
+      <td>{planet.climate}</td>
+      <td>{planet.gravity}</td>
+      <td>{planet.terrain}</td>
+      <td>{planet.surface_water}</td>
+      <td>{planet.population}</td>
+      <td>{planet.films}</td>
+      <td>{planet.created}</td>
+      <td>{planet.edited}</td>
+      <td>{planet.url}</td>
+    </tr>
+  ));
 
   const nameIncludesInputValue = (planet) => {
     const include = planet.name.toLowerCase().includes(nameFilter.name);
@@ -34,16 +40,35 @@ function Table() {
   };
 
   const checkValues = (planet, obj) => {
-    if (obj.comparison === "menor que") {
+    if (obj.comparison === 'menor que') {
       return parseFloat(planet[obj.column]) < parseFloat(obj.value);
     }
-    if (obj.comparison === "maior que") {
+    if (obj.comparison === 'maior que') {
       return parseFloat(planet[obj.column]) > parseFloat(obj.value);
     }
-    if (obj.comparison === "igual a") {
+    if (obj.comparison === 'igual a') {
       return parseFloat(planet[obj.column]) === parseFloat(obj.value);
     }
     return true;
+  };
+
+  const sortCallback = (first, second) => {
+    if (sort === '') {
+      if (first.name < second.name) {
+        return NEGATIVE;
+      }
+      if (first.name > second.name) {
+        return POSITIVE;
+      }
+      return ZERO;
+    }
+    if (first === 'unknown') {
+      return NEGATIVE;
+    }
+    if (sort === 'ASC') {
+      return first[column] - second[column];
+    }
+    return second[column] - first[column];
   };
 
   const filterPlanets = (planets) => {
@@ -51,9 +76,11 @@ function Table() {
 
     const numericFiltered = numericValuesFilter.reduce(
       (prev, actual) => prev.filter((planet) => checkValues(planet, actual)),
-      nameFilteredPlanets
+      nameFilteredPlanets,
     );
-    return renderTableLines(numericFiltered);
+
+    const sortedPlanets = numericFiltered.sort(sortCallback);
+    return renderTableLines(sortedPlanets);
   };
 
   return (
