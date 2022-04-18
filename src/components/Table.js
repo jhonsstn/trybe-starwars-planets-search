@@ -6,8 +6,10 @@ const POSITIVE = 1;
 const ZERO = 0;
 
 function Table() {
-  const { data, fetchData, nameFilter } = useContext(PlanetsContext);
   const {
+    data,
+    fetchData,
+    nameFilter,
     numericValuesFilter,
     order: { column, sort },
   } = useContext(PlanetsContext);
